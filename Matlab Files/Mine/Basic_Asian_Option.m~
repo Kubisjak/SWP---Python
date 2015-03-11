@@ -1,0 +1,27 @@
+% Script to price an Asian option using a monte-carlo approach.
+
+S0 =100;       % Price of underlying today
+X = 110;       % Strike at expiry
+sigma = 0.2;    % expected vol.
+r = 0.05;     % Risk free rate
+T = 1; 
+
+steps = 500;
+nruns = 10000; % Number of simulated paths
+
+% Generate potential future asset paths
+S = AssetPaths(S0,r,sig,T,steps,nsims);
+plot(S);
+
+% calculate the payoff for each path for a Put
+PutPayoffT = max(X-mean(S),0);
+
+% calculate the payoff for each path for a Call
+CallPayoffT = max(mean(S)-X,0);
+
+% discount back
+putPrice = mean(PutPayoffT)*exp(-r*T)
+callPrice = mean(CallPayoffT)*exp(-r*T)
+
+STDerrorCall = std(PutPayoffT*exp(-r*T))/sqrt(nruns)
+
